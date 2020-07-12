@@ -1,0 +1,45 @@
+# usage
+# docker-compose up
+version: "3.1"
+
+volumes:
+  db:
+    driver: local
+  pgadmindata:
+    driver: local
+  pgadminlibdata:
+    driver: local
+
+services:
+  # PostgreSQL database
+  # https://hub.docker.com/_/postgres
+  postgres:
+    container_name: postgres
+    image: postgres:10.11-alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+  
+  pgadmin:
+    links:
+    - postgres:postgres
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+    - "9090:80"
+    volumes:
+    - pgadmindata:/root/.pgadmin
+    - pgadminlibdata:/var/lib/pgadmin
+    env_file:
+    - docker.env
+    networks:
+    - postgres
+  
+networks:
+  postgres:
+    driver: bridge
