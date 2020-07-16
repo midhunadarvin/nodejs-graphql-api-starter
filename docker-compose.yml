@@ -14,7 +14,7 @@ services:
   # PostgreSQL database
   # https://hub.docker.com/_/postgres
   postgres:
-    container_name: postgres
+    container_name: emart-postgres
     image: postgres:10.11-alpine
     volumes:
       - db:/var/lib/postgresql/data
@@ -26,9 +26,9 @@ services:
       - postgres
   
   pgadmin:
+    container_name: emart-pgadmin
     links:
     - postgres:postgres
-    container_name: pgadmin
     image: dpage/pgadmin4
     ports:
     - "9090:80"

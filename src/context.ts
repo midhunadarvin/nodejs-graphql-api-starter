@@ -18,7 +18,6 @@ export class Context {
 
   constructor(req: Request) {
     this.req = req;
-
     if (req.user) {
       // Add user object to the cache
       this.userById.prime(req.user.id, req.user);

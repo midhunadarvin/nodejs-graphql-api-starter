@@ -7,7 +7,7 @@
 import fs from 'fs';
 import dotenv from 'dotenv';
 import graphql from 'express-graphql';
-import { printSchema } from 'graphql';
+import { printSchema, GraphQLError } from 'graphql';
 import { express as voyager } from 'graphql-voyager/middleware';
 import express, { Router, Request, Response } from 'express';
 
@@ -34,7 +34,7 @@ api.use(
     context: new Context(req),
     graphiql: process.env.APP_ENV !== 'production',
     pretty: false,
-    customFormatErrorFn: err => {
+    customFormatErrorFn: (err: GraphQLError) => {
       console.error(err.originalError || err);
       return {
         message: err.message,

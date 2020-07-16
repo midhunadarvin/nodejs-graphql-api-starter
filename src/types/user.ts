@@ -7,18 +7,16 @@
 import { globalIdField } from 'graphql-relay';
 import {
   GraphQLObjectType,
-  GraphQLList,
   GraphQLNonNull,
   GraphQLString,
   GraphQLBoolean,
 } from 'graphql';
 
-import { IdentityType } from './identity';
 import { nodeInterface } from '../node';
 import { dateField } from '../fields';
 import { Context } from '../context';
 
-export const UserType = new GraphQLObjectType<any, Context, any>({
+export const UserType = new GraphQLObjectType<any, Context>({
   name: 'User',
   interfaces: [nodeInterface],
 
@@ -31,7 +29,7 @@ export const UserType = new GraphQLObjectType<any, Context, any>({
 
     email: {
       type: GraphQLString,
-      resolve(self, args, ctx) {
+      resolve(self, args, ctx): string | null {
         return ctx.user && (ctx.user.id === self.id || ctx.user.isAdmin)
           ? self.email
           : null;
@@ -40,35 +38,21 @@ export const UserType = new GraphQLObjectType<any, Context, any>({
 
     displayName: {
       type: GraphQLString,
-      resolve(self) {
+      resolve(self): string {
         return self.display_name;
       },
     },
 
     photoURL: {
       type: GraphQLString,
-      resolve(self) {
+      resolve(self): string {
         return self.photo_url;
-      },
-    },
-
-    timeZone: {
-      type: GraphQLString,
-      resolve(self) {
-        return self.time_zone;
-      },
-    },
-
-    identities: {
-      type: new GraphQLList(IdentityType),
-      resolve(self, args, ctx) {
-        return ctx.identitiesByUserId.load(self.id);
       },
     },
 
     isAdmin: {
       type: GraphQLBoolean,
-      resolve(self, args, ctx) {
+      resolve(self, args, ctx): boolean {
         return ctx.user && ctx.user.id === self.id
           ? ctx.user.isAdmin || false
           : self.is_admin;

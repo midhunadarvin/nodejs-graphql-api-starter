@@ -9,7 +9,7 @@ import Knex from 'knex';
 import faker from 'faker';
 
 export async function seed(db: Knex): Promise<void> {
-  const users = Array.from({ length: 200 }).map(() => {
+  const users = Array.from({ length: 10 }).map(() => {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     return [

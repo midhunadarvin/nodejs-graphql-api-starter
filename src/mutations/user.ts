@@ -16,10 +16,18 @@ import db from '../db';
 import { UserType } from '../types';
 import { fromGlobalId } from '../utils';
 
+function usernameAvailable(id: any, username: any) {
+  return db
+    .table('users')
+    .where({ username })
+    .whereNot({ id })
+    .select(1)
+    .then(x => !x.length);
+}
+
 export const updateUser = mutationWithClientMutationId({
   name: 'UpdateUser',
-  description: 'Updates a user.',
-
+  description: 'Creates or Updates a user.',
   inputFields: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     username: { type: GraphQLString },
@@ -40,15 +48,6 @@ export const updateUser = mutationWithClientMutationId({
 
     // Check permissions
     ctx.ensureAuthorized(user => user.id === id || user.isAdmin);
-
-    function usernameAvailable(username) {
-      return db
-        .table('users')
-        .where({ username })
-        .whereNot({ id })
-        .select(1)
-        .then(x => !x.length);
-    }
 
     // Validate and sanitize user input
     const data = await ctx.validate(
@@ -88,7 +87,7 @@ export const updateUser = mutationWithClientMutationId({
       [user] = await db
         .table('users')
         .where({ id })
-        .update({ ...data, updated_at: db.fn.now() })
+        .update({ ...data, 'updated_at': db.fn.now() })
         .returning('*');
     }
 
@@ -112,7 +111,7 @@ export const deleteUser = mutationWithClientMutationId({
 
   async mutateAndGetPayload(input, ctx) {
     // Check permissions
-    ctx.ensureAuthorized(user => user.isAdmin);
+    ctx.ensureAuthorized((user: any) => user.isAdmin);
 
     const id = fromGlobalId(input.id, 'User');
 

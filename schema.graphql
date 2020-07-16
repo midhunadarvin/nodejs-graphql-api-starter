@@ -36,29 +36,10 @@ type User implements Node {
   email: String
   displayName: String
   photoURL: String
-  timeZone: String
-  identities: [Identity]
   isAdmin: Boolean
   createdAt(format: String): String
   updatedAt(format: String): String
   lastLoginAt(format: String): String
-}
-
-type Identity {
-  # The ID of an object
-  id: ID!
-  provider: AuthenticationProvider
-  providerId: String
-  email: String
-  displayName: String
-  photoURL: String
-  profileURL: String
-}
-
-enum AuthenticationProvider {
-  GOOGLE
-  TWITTER
-  FACEBOOK
 }
 
 # A connection to a list of items.
@@ -124,7 +105,7 @@ type Comment implements Node {
 }
 
 type Mutation {
-  # Updates a user.
+  # Creates or Updates a user.
   updateUser(input: UpdateUserInput!): UpdateUserPayload
 
   # Deletes a user.
