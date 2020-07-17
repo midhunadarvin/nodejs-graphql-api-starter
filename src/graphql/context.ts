@@ -7,9 +7,9 @@
 import DataLoader from 'dataloader';
 import { Request } from 'express';
 
-import db from './db';
-import { Validator } from './validator';
-import { mapTo, mapToMany, mapToValues } from './utils';
+import db from '../db';
+import { Validator } from '../validator';
+import { mapTo, mapToMany, mapToValues } from '../utils';
 import { UnauthorizedError, ForbiddenError, ValidationError } from './errors';
 
 export class Context {

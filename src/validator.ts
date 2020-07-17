@@ -10,7 +10,7 @@ import isURL from 'validator/lib/isURL';
 import textTrim from 'validator/lib/trim';
 import { fromGlobalId } from 'graphql-relay';
 
-function isEmpty(value) {
+function isEmpty(value: any): boolean {
   return typeof value === 'undefined' || value === null || value === '';
 }
 
@@ -103,12 +103,12 @@ export class Validator {
       if (options && options.min && options.max) {
         this.state.addError(
           message ||
-            `The ${this.state.name} field must be between ${options.min} and ${options.max} characters long.`,
+          `The ${this.state.name} field must be between ${options.min} and ${options.max} characters long.`,
         );
       } else if (options && options.max) {
         this.state.addError(
           message ||
-            `The ${this.state.name} field must be up to ${options.max} characters long.`,
+          `The ${this.state.name} field must be up to ${options.max} characters long.`,
         );
       } else {
         this.state.addError(message);
@@ -131,15 +131,15 @@ export class Validator {
       isEmpty(state.value)
         ? state
         : Promise.resolve()
-            .then(() => check(state.value, message))
-            .then(isValid => {
-              if (!isValid) state.addError(message);
-              return state;
-            })
-            .catch(err => {
-              state.addError(err.message);
-              return Promise.resolve(state);
-            }),
+          .then(() => check(state.value, message))
+          .then(isValid => {
+            if (!isValid) state.addError(message);
+            return state;
+          })
+          .catch(err => {
+            state.addError(err.message);
+            return Promise.resolve(state);
+          }),
     );
     return this;
   }
@@ -160,8 +160,8 @@ export class Validator {
 
     return this.states.some(x => x.promise)
       ? Promise.all(this.states.map(x => x.promise || Promise.resolve(x))).then(
-          done,
-        )
+        done,
+      )
       : done(this.states);
   }
 }

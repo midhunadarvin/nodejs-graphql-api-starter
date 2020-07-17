@@ -12,7 +12,7 @@ import {
   cursorToOffset,
 } from 'graphql-relay';
 
-import db from '../db';
+import db from '../../db';
 import { countField } from '../fields';
 import { UserType } from '../types';
 

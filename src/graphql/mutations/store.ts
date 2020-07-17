@@ -15,9 +15,9 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import db from '../db';
+import db from '../../db';
 import { StoryType } from '../types';
-import { fromGlobalId } from '../utils';
+import { fromGlobalId } from '../../utils';
 
 function slug(text: string) {
   return slugify(text, { lower: true });

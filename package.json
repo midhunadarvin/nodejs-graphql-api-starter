@@ -62,8 +62,8 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "nodemon ./src",
-    "start-debug": "nodemon --inspect ./src",
+    "start": "nodemon ./src/server",
+    "start-debug": "nodemon --inspect ./src/server",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" .",
     "fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" --fix .",
     "check": "ts check",

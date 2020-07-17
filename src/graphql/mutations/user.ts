@@ -12,11 +12,11 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import db from '../db';
+import db from '../../db';
 import { UserType } from '../types';
-import { fromGlobalId } from '../utils';
+import { fromGlobalId } from '../../utils';
 
-function usernameAvailable(id: any, username: any) {
+function usernameAvailable(id: any, username: any): any {
   return db
     .table('users')
     .where({ username })

@@ -6,7 +6,7 @@
 
 import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 
-import db from '../db';
+import db from '../../db';
 import { StoryType } from '../types';
 
 export const story = {
