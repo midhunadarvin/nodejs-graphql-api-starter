@@ -26,9 +26,10 @@ export async function up(db: Knex): Promise<void> {
     table.uuid('id').notNullable().defaultTo(db.raw('uuid_generate_v4()')).primary();
     table.uuid('owner_id').notNullable().references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE');
     table.string('name', 120).notNullable();
-    table.string('description', 120).notNullable();
-    table.float('latitude', 10, 8);
-    table.float('longitude', 11, 8);
+    table.string('description', 255);
+    table.string('address', 255);
+    table.float('latitude', 14, 10);
+    table.float('longitude', 14, 10);
     table.timestamps(false, true);
   });
 }
