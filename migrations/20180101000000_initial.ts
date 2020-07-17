@@ -12,12 +12,19 @@ export async function up(db: Knex): Promise<void> {
   await db.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
   await db.raw('CREATE EXTENSION IF NOT EXISTS "hstore"');
 
+  await db.schema.createTable('user_roles', table => {
+    table.integer('id').notNullable().primary();
+    table.string('name', 15).notNullable().unique();
+  });
+
   await db.schema.createTable('users', table => {
     table.uuid('id').notNullable().defaultTo(db.raw('uuid_generate_v4()')).primary();
-    table.string('username', 50).notNullable().unique();
-    table.string('email', 100);
-    table.string('display_name', 100);
+    table.string('username', 25).notNullable().unique();
+    table.string('email', 25);
+    table.string('password', 100);
+    table.string('display_name', 25);
     table.string('photo_url', 250);
+    table.integer('role').notNullable().defaultTo(3);
     table.timestamp('last_login_at').notNullable().defaultTo(db.fn.now());
     table.timestamps(false, true);
   });
@@ -37,6 +44,7 @@ export async function up(db: Knex): Promise<void> {
 export async function down(db: Knex): Promise<void> {
   await db.schema.dropTableIfExists('stores');
   await db.schema.dropTableIfExists('users');
+  await db.schema.dropTableIfExists('user_roles');
 }
 
 export const configuration = { transaction: true };

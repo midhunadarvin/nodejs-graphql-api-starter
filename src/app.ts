@@ -1,5 +1,6 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import { express as voyager } from 'graphql-voyager/middleware';
 import authMiddleware from './auth/auth.middleware';
 import { printSchema } from 'graphql';
@@ -21,6 +22,7 @@ class App {
     private initializeMiddlewares(): void {
         this.app.use(authMiddleware);
         this.app.use(bodyParser.json());
+        this.app.use(cookieParser());
         if (process.env.APP_ENV !== 'production') {
             this.app.use('/graphql/model', voyager({ endpointUrl: '/graphql' }));
         }
