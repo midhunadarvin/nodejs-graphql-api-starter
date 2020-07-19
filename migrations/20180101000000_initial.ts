@@ -20,7 +20,7 @@ export async function up(db: Knex): Promise<void> {
   await db.schema.createTable('users', table => {
     table.uuid('id').notNullable().defaultTo(db.raw('uuid_generate_v4()')).primary();
     table.string('username', 25).notNullable().unique();
-    table.string('email', 25);
+    table.string('email', 40);
     table.string('password', 100);
     table.string('display_name', 25);
     table.string('photo_url', 250);
