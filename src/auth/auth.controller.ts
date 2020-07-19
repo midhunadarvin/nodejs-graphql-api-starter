@@ -1,6 +1,8 @@
 import express, { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthService } from './auth.service';
+import validator from './auth.validator';
+import { validationResult } from 'express-validator';
 
 const jwtExpirySeconds = 300;
 
@@ -13,17 +15,17 @@ class AuthController {
     }
 
     public intializeRoutes(): void {
-        this.router.post(`${this.path}/login`, this.login);
+        this.router.post(`${this.path}/login`, validator.validate('login'), this.login);
     }
 
     private login = async (request: express.Request, response: express.Response): Promise<void> => {
         // Get credentials from JSON body
-        const { username, password } = request.body;
-        if (!username || !password) {
-            // return 401 error is username or password doesn't exist, or if password does
-            // not match the password in our records
-            return response.status(401).end()
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            response.status(422).json({ errors: errors.array() });
+            return;
         }
+        const { username, password } = request.body;
         const user = await this.authService.validateUser(username, password);
         if (user) {
             // Create a new token with the username in the payload

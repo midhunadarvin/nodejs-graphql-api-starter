@@ -19,11 +19,11 @@ export default function auth(req: Request, res: Response, next: NextFunction): v
                     throw 'Invalid user ID';
                 };
             } else {
-                res.status(401).json({ error: 'Invalid request!' }).end();
+                res.status(401).json({ error: 'Unauthorized!' }).end();
             }
         } catch (error) {
             console.log(error);
-            res.status(401).json({ error: 'Invalid request!' }).end();
+            res.status(401).json({ error: 'Unauthorized!' }).end();
         }
     }
 }
