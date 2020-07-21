@@ -39,6 +39,14 @@ export async function seed(db: Knex): Promise<void> {
     'Midhun A Darvin',
     'https://robohash.org/99850cf7a8887457815383286fd47858?set=set4&bgset=&size=400x400',
     '1'
+  ], [
+    'ce5dc418-c838-11ea-87d0-0242ac170007',
+    'akshayvenugopal',
+    'akshayvenugopal007@gmail.com',
+    bcrypt.hashSync('password1@3', 10),
+    'Akshay Venugopal',
+    'https://robohash.org/99850cf7a8887457815383286fd47858?set=set4&bgset=&size=400x400',
+    '1'
   ]];
 
   await db.raw(
