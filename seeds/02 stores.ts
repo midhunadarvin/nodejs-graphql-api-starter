@@ -7,7 +7,56 @@
 
 import Knex from 'knex';
 
+function randomGeo(center, radius) {
+  let y0 = center.latitude;
+  let x0 = center.longitude;
+  let rd = radius / 111300; //about 111300 meters in one degree
+
+  let u = Math.random();
+  let v = Math.random();
+
+  let w = rd * Math.sqrt(u);
+  let t = 2 * Math.PI * v;
+  let x = w * Math.cos(t);
+  let y = w * Math.sin(t);
+
+  //Adjust the x-coordinate for the shrinking of the east-west distances
+  let xp = x / Math.cos(y0);
+
+  let newlat = y + y0;
+  let newlon = x + x0;
+  let newlon2 = x + x0;
+
+  return {
+    'latitude': newlat.toFixed(5),
+    'longitude': newlon.toFixed(5),
+    // 'longitude2': newlon2.toFixed(5),
+    // 'distance': distance(center.latitude, center.longitude, newlat, newlon).toFixed(2),
+    // 'distance2': distance(center.latitude, center.longitude, newlat, newlon2).toFixed(2),
+  };
+}
+
+//Generate a number of mappoints
+function generateMapPoints(centerpoint, distance, amount) {
+  let mappoints = [];
+  for (let i = 0; i < amount; i++) {
+    mappoints.push(randomGeo(centerpoint, distance));
+  }
+  return mappoints;
+}
+
 export async function seed(db: Knex): Promise<void> {
+  const distanceLimit = 2000; //in meters
+  const center = { latitude: 9.9683621, longitude: 76.318202 }; // vytilla
+  const randomStores = generateMapPoints(center, distanceLimit, 20).map((item, index: number) => [
+    'ce5dc418-c838-11ea-87d0-0242ac130003',
+    'Store ' + index,
+    'Store ' + index + ' Description',
+    'Store Address ' + index,
+    item.latitude,
+    item.longitude,
+  ]);
+
   const stores = [
     [
       'ce5dc418-c838-11ea-87d0-0242ac130003',
@@ -64,8 +113,8 @@ export async function seed(db: Knex): Promise<void> {
       'Kaniampuzha Road, Opposite Vyttila HOD, Vyttila, Ernakulam, Kerala 682019',
       '9.9698492',
       '76.3202298'
-    ]
-
+    ],
+    ...randomStores
   ];
 
   await db.raw(

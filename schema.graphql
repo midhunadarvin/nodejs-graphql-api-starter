@@ -6,6 +6,8 @@ schema {
 type Root {
   user(id: ID): User
   store(id: ID): Store
+  users: [User]
+  stores: [Store]
 }
 
 type User {

@@ -4,12 +4,13 @@
  * Copyright © 2016-present Kriasoft | MIT License
  */
 
-import { GraphQLSchema, GraphQLObjectType, GraphQLID } from 'graphql';
+import { GraphQLSchema, GraphQLObjectType, GraphQLID, GraphQLList } from 'graphql';
 
 import { UserType, StoreType } from './types';
 import { UserDto } from '../interface/user.interface';
 import UserDao from '../repository/user.dao';
 import StoreDao from '../repository/store.dao';
+import { StoreDto } from '../interface/store.interface';
 
 const userDao = new UserDao();
 const storeDao = new StoreDao();
@@ -23,7 +24,7 @@ export default new GraphQLSchema({
       user: {
         type: UserType,
         args: { id: { type: GraphQLID } },
-        resolve: async (root, args, ctx): Promise<UserDto | null> => {
+        resolve: async (parent, args, ctx): Promise<UserDto | null> => {
           const user = await userDao.userById.load(args.id);
           return args.id ? user : null;
         },
@@ -31,13 +32,23 @@ export default new GraphQLSchema({
       store: {
         type: StoreType,
         args: { id: { type: GraphQLID } },
-        resolve: async (root, args, ctx): Promise<UserDto | null> => {
-          console.log(args);
+        resolve: async (parent, args, ctx): Promise<UserDto | null> => {
           const store = await storeDao.storeById.load(args.id);
-          console.log(store);
           return args.id ? store : null;
         },
-      }
+      },
+      users: {
+        type: new GraphQLList(UserType),
+        resolve: async (parent, args): Promise<UserDto[]> => {
+          return await userDao.getUsers();
+        }
+      },
+      stores: {
+        type: new GraphQLList(StoreType),
+        resolve: async (parent, args): Promise<StoreDto[]> => {
+          return await storeDao.getStores();
+        }
+      },
     },
   }),
 });

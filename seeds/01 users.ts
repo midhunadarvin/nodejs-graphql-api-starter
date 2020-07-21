@@ -7,7 +7,8 @@
 
 import Knex from 'knex';
 import bcrypt from 'bcrypt';
-// import faker from 'faker';
+import faker from 'faker';
+import uuid from 'uuid';
 
 export async function seed(db: Knex): Promise<void> {
   const roles = [[1, 'admin'], [2, 'store_owner'], [3, 'customer']];
@@ -20,16 +21,19 @@ export async function seed(db: Knex): Promise<void> {
     roles.reduce((acc, v) => [...acc, ...v], []),
   );
 
-  // const users = Array.from({ length: 10 }).map(() => {
-  //   const firstName = faker.name.firstName();
-  //   const lastName = faker.name.lastName();
-  //   return [
-  //     faker.internet.userName(firstName, lastName),
-  //     faker.internet.email(firstName, lastName, 'example.com'),
-  //     faker.name.findName(firstName, lastName),
-  //     faker.internet.avatar(),
-  //   ];
-  // });
+  const fakeUsers = Array.from({ length: 10 }).map(() => {
+    const firstName = faker.name.firstName();
+    const lastName = faker.name.lastName();
+    return [
+      uuid.v4(),
+      faker.internet.userName(firstName, lastName),
+      faker.internet.email(firstName, lastName, 'example.com'),
+      null,
+      faker.name.findName(firstName, lastName),
+      faker.internet.avatar(),
+      '3'
+    ];
+  });
 
   const users = [[
     'ce5dc418-c838-11ea-87d0-0242ac130003',
@@ -47,7 +51,9 @@ export async function seed(db: Knex): Promise<void> {
     'Akshay Venugopal',
     'https://robohash.org/99850cf7a8887457815383286fd47858?set=set4&bgset=&size=400x400',
     '1'
-  ]];
+  ],
+  ...fakeUsers
+  ];
 
   await db.raw(
     `

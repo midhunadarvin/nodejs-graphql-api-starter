@@ -1,10 +1,23 @@
 import DataLoader from 'dataloader';
 import { mapTo } from '../utils';
 import db from '../db';
+import { UserDto } from '../interface/user.interface';
 class UserDao {
     /*
     * Data loaders
     * ------------------------------------------------------------------------ */
+    public async getUsers(): Promise<UserDto[]> {
+        return db
+            .table('users')
+            .select()
+            .then((rows: any[]) => {
+                console.log(rows);
+                return rows.map(x => {
+                    this.userByUsername.prime(x.username, x);
+                    return x;
+                })
+            });
+    }
 
     userById = new DataLoader(keys =>
         db
