@@ -47,7 +47,7 @@ export const users = {
 
   async resolve(root, args, ctx) {
     // Only admins are allowed to fetch the list of users
-    ctx.ensureAuthorized(user => user.isAdmin);
+    ctx.ensureAuthorized((user: any) => user.isAdmin);
 
     const query = db.table('users');
 

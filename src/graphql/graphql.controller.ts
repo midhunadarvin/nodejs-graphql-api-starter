@@ -13,12 +13,12 @@ class GraphQLController {
 
     public intializeRoutes(): void {
         this.router.use(`${this.path}`,
-            graphql(req => ({
+            graphql((req: any) => ({
                 schema,
                 context: new Context(req),
                 graphiql: process.env.APP_ENV !== 'production',
                 pretty: false,
-                customFormatErrorFn: (err: GraphQLError) => {
+                customFormatErrorFn: (err: any) => {
                     console.error(err.originalError || err);
                     return {
                         message: err.message,

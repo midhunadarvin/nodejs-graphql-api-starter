@@ -4,14 +4,15 @@
  * Copyright © 2016-present Kriasoft | MIT License
  */
 
-import { GraphQLSchema, GraphQLObjectType } from 'graphql';
+import { GraphQLSchema, GraphQLObjectType, GraphQLID } from 'graphql';
 
-import * as queries from './queries';
-import * as mutations from './mutations';
-import { nodeField, nodesField } from './node';
+import { UserType, StoreType } from './types';
+import { UserDto } from '../interface/user.interface';
+import UserDao from '../repository/user.dao';
+import StoreDao from '../repository/store.dao';
 
-delete queries.__esModule;
-delete mutations.__esModule;
+const userDao = new UserDao();
+const storeDao = new StoreDao();
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -19,14 +20,24 @@ export default new GraphQLSchema({
     description: 'The top-level API',
 
     fields: {
-      node: nodeField,
-      nodes: nodesField,
-      ...queries,
+      user: {
+        type: UserType,
+        args: { id: { type: GraphQLID } },
+        resolve: async (root, args, ctx): Promise<UserDto | null> => {
+          const user = await userDao.userById.load(args.id);
+          return args.id ? user : null;
+        },
+      },
+      store: {
+        type: StoreType,
+        args: { id: { type: GraphQLID } },
+        resolve: async (root, args, ctx): Promise<UserDto | null> => {
+          console.log(args);
+          const store = await storeDao.storeById.load(args.id);
+          console.log(store);
+          return args.id ? store : null;
+        },
+      }
     },
-  }),
-
-  mutation: new GraphQLObjectType({
-    name: 'Mutation',
-    fields: mutations,
   }),
 });

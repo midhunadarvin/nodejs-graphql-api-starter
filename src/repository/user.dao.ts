@@ -11,12 +11,12 @@ class UserDao {
             .table('users')
             .whereIn('id', keys as string[])
             .select()
-            .then((rows: any[]) =>
-                rows.map(x => {
+            .then((rows: any[]) => {
+                return rows.map(x => {
                     this.userByUsername.prime(x.username, x);
                     return x;
-                }),
-            )
+                })
+            })
             .then(mapTo(keys, (x: any) => x.id)),
     );
 

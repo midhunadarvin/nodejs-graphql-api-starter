@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 const whiteListedUrls = ['/auth/login'];
 
 export default function auth(req: Request, res: Response, next: NextFunction): void {
-    // TODO: Validate authentication token
     if (whiteListedUrls.includes(req.url)) {
         next();
     } else {
@@ -13,7 +12,7 @@ export default function auth(req: Request, res: Response, next: NextFunction): v
                 const token = req.headers.authorization.split(' ')[1];
                 const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET_KEY as jwt.Secret);
                 if (decodedToken.username) {
-                    req.user = { username: decodedToken.username, isAdmin: decodedToken.isAdmin };
+                    req.user = { username: decodedToken.username, isAdmin: false };
                     next();
                 } else {
                     throw 'Invalid user ID';

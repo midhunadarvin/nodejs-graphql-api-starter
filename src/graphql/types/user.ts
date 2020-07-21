@@ -4,24 +4,21 @@
  * Copyright © 2016-present Kriasoft | MIT License
  */
 
-import { globalIdField } from 'graphql-relay';
 import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLID,
 } from 'graphql';
 
-import { nodeInterface } from '../node';
 import { dateField } from '../fields';
 import { Context } from '../context';
 
 export const UserType = new GraphQLObjectType<any, Context>({
   name: 'User',
-  interfaces: [nodeInterface],
-
   fields: {
-    id: globalIdField(),
+    id: { type: GraphQLID },
 
     username: {
       type: new GraphQLNonNull(GraphQLString),
@@ -29,11 +26,6 @@ export const UserType = new GraphQLObjectType<any, Context>({
 
     email: {
       type: GraphQLString,
-      resolve(self, args, ctx): string | null {
-        return ctx.user && (ctx.user.id === self.id || ctx.user.isAdmin)
-          ? self.email
-          : null;
-      },
     },
 
     displayName: {
@@ -52,10 +44,8 @@ export const UserType = new GraphQLObjectType<any, Context>({
 
     isAdmin: {
       type: GraphQLBoolean,
-      resolve(self, args, ctx): boolean {
-        return ctx.user && ctx.user.id === self.id
-          ? ctx.user.isAdmin || false
-          : self.is_admin;
+      resolve(self): boolean {
+        return self.role === 1;
       },
     },
 
