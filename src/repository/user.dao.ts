@@ -11,7 +11,6 @@ class UserDao {
             .table('users')
             .select()
             .then((rows: any[]) => {
-                console.log(rows);
                 return rows.map(x => {
                     this.userByUsername.prime(x.username, x);
                     return x;

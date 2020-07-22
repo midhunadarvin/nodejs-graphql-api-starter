@@ -18,6 +18,7 @@ services:
     image: postgres:10.11-alpine
     volumes:
       - db:/var/lib/postgresql/data
+      - ./db-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     env_file:

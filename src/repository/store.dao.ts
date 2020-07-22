@@ -6,12 +6,14 @@ class StoreDao {
     /*
     * Data loaders
     * ------------------------------------------------------------------------ */
-    public async getStores(): Promise<StoreDto[]> {
-        return db
-            .table('stores')
-            .select()
+    public async getStores(params: { latitude?: number; longitude?: number; distance?: number }): Promise<StoreDto[]> {
+        const { latitude, longitude, distance } = params;
+        let query = db.table('stores');
+        if (latitude && longitude && distance) {
+            query = query.andWhereRaw('((point(latitude, longitude) <@> point(?,?)) * 1609.34) < ?', [latitude, longitude, distance])
+        }
+        return query.select()
             .then((rows: any[]) => {
-                console.log(rows);
                 return rows.map(x => {
                     this.storeById.prime(x.id, x);
                     return x;

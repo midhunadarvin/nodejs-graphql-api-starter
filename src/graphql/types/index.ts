@@ -7,4 +7,3 @@
 export * from './user';
 export * from './identity';
 export * from './store';
-export * from './comment';

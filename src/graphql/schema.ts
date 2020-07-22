@@ -4,7 +4,7 @@
  * Copyright © 2016-present Kriasoft | MIT License
  */
 
-import { GraphQLSchema, GraphQLObjectType, GraphQLID, GraphQLList } from 'graphql';
+import { GraphQLSchema, GraphQLObjectType, GraphQLID, GraphQLList, GraphQLFloat, GraphQLInt } from 'graphql';
 
 import { UserType, StoreType } from './types';
 import { UserDto } from '../interface/user.interface';
@@ -45,8 +45,9 @@ export default new GraphQLSchema({
       },
       stores: {
         type: new GraphQLList(StoreType),
+        args: { latitude: { type: GraphQLFloat }, longitude: { type: GraphQLFloat }, distance: { type: GraphQLInt } },
         resolve: async (parent, args): Promise<StoreDto[]> => {
-          return await storeDao.getStores();
+          return await storeDao.getStores({ latitude: args.latitude, longitude: args.longitude, distance: args.distance });
         }
       },
     },

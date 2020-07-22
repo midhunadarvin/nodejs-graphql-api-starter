@@ -35,8 +35,8 @@ export async function up(db: Knex): Promise<void> {
     table.string('name', 120).notNullable();
     table.string('description', 255);
     table.string('address', 255);
-    table.float('latitude', 14, 10);
-    table.float('longitude', 14, 10);
+    table.decimal('latitude', 11, 8);
+    table.decimal('longitude', 11, 8);
     table.timestamps(false, true);
   });
 }

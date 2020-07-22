@@ -7,7 +7,7 @@ type Root {
   user(id: ID): User
   store(id: ID): Store
   users: [User]
-  stores: [Store]
+  stores(latitude: Float, longitude: Float, distance: Int): [Store]
 }
 
 type User {

@@ -5,7 +5,7 @@
  */
 
 // TODO: Log the error to Google Stackdriver, Rollbar etc.
-function report(error: Error) {
+function report(error: Error): void {
   // eslint-disable-next-line no-console
   console.error(error);
 }
