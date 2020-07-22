@@ -10,7 +10,7 @@ class StoreDao {
         const { latitude, longitude, distance } = params;
         let query = db.table('stores');
         if (latitude && longitude && distance) {
-            query = query.andWhereRaw('((point(latitude, longitude) <@> point(?,?)) * 1609.34) < ?', [latitude, longitude, distance])
+            query = query.andWhereRaw('((point(longitude, latitude) <@> point(?,?)) * 1609.34) < ?', [longitude, latitude, distance])
         }
         return query.select()
             .then((rows: any[]) => {

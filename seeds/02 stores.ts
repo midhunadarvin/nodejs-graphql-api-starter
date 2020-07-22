@@ -46,9 +46,12 @@ function generateMapPoints(centerpoint, distance, amount) {
 }
 
 export async function seed(db: Knex): Promise<void> {
-  const distanceLimit = 2000; //in meters
+  const distanceLimit = 5000; //in meters
+  // const center = { latitude: 8.5685451, longitude: 76.8731403 };
+  // const center = { latitude: 11.2769492, longitude: 75.7850003 }; // kozhikode
+  // const center = { latitude: 10.5276446, longitude: 76.2143898 }; // thrissur
   const center = { latitude: 9.9683621, longitude: 76.318202 }; // vytilla
-  const randomStores = generateMapPoints(center, distanceLimit, 20).map((item, index: number) => [
+  const randomStores = generateMapPoints(center, distanceLimit, 10000).map((item, index: number) => [
     'ce5dc418-c838-11ea-87d0-0242ac130003',
     'Store ' + index,
     'Store ' + index + ' Description',
